@@ -22,8 +22,8 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public List<Student> getStudents() {
-        return studentService.getStudents();
+    public ResponseEntity<List<Student>> getStudents() {
+        return ResponseEntity.ok().body(studentService.getStudents());
     }
 
     @PostMapping("/student")
