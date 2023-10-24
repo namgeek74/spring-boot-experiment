@@ -1,13 +1,18 @@
 package com.springboot.controller;
 
+import com.springboot.dto.ImageUploadDTO;
 import com.springboot.dto.ImageUploadResponse;
 import com.springboot.entity.Image;
 import com.springboot.repository.ImageRepository;
 import com.springboot.util.ImageUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,10 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 public class ImageController {
+    private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png");
+
     private ImageRepository imageRepository;
 
     @Autowired
@@ -28,8 +39,30 @@ public class ImageController {
     }
 
     @PostMapping("/upload/image")
-    public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam("image") MultipartFile file)
+    public ResponseEntity<?> uploadImage(
+            @Valid @RequestParam("image") MultipartFile file
+    )
             throws IOException {
+
+        if (file.isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Please select an image file.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        if (!isValidImageType(file)) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Incorrect format, accept only jpeg and png file.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        // Perform custom file size validation
+        long maxSizeBytes = 5; // 5MB
+        if (file.getSize() > maxSizeBytes) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Image file size must be less than 5MB.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
 
         imageRepository.save(Image.builder()
                 .name(file.getOriginalFilename())
@@ -71,5 +104,10 @@ public class ImageController {
                 .ok()
                 .contentType(MediaType.valueOf(dbImage.get().getType()))
                 .body(ImageUtil.decompressImage(dbImage.get().getImage()));
+    }
+
+    private boolean isValidImageType(MultipartFile imageFile) {
+        String contentType = imageFile.getContentType();
+        return contentType != null && ALLOWED_IMAGE_TYPES.contains(contentType);
     }
 }
