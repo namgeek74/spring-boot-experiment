@@ -57,7 +57,7 @@ public class ImageController {
         }
 
         // Perform custom file size validation
-        long maxSizeBytes = 5; // 5MB
+        long maxSizeBytes = 5 * 1024 * 1024; // 5MB, default is Byte
         if (file.getSize() > maxSizeBytes) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Image file size must be less than 5MB.");
