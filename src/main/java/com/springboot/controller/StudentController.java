@@ -45,4 +45,9 @@ public class StudentController {
     public String featureMaster1() {
         return "feature master 1";
     }
+
+    @GetMapping("/feature-mater-2")
+    public String featureMaster2() {
+        return "feature master 2";
+    }
 }
