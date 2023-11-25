@@ -40,4 +40,9 @@ public class StudentController {
     public String featureBranch12() {
         return "feature branch 1 - 2";
     }
+
+    @GetMapping("/feature-mater-1")
+    public String featureMaster1() {
+        return "feature master 1";
+    }
 }
