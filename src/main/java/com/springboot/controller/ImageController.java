@@ -118,4 +118,9 @@ public class ImageController {
     public String featureBranch2() {
         return "feature branch 2";
     }
+
+    @GetMapping("/feature-branch-2-1")
+    public String featureBranch21() {
+        return "feature branch 2-1";
+    }
 }
