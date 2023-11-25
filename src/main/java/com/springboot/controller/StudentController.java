@@ -50,4 +50,9 @@ public class StudentController {
     public String featureMaster2() {
         return "feature master 2";
     }
+
+    @GetMapping("/feature-branch-2-rebase")
+    public String featureMaster2Rebase() {
+        return "feature master 2 rebase";
+    }
 }
