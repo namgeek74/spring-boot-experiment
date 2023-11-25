@@ -30,4 +30,14 @@ public class StudentController {
     public ResponseEntity<Student> saveStudent(@RequestBody @Valid StudentRequestDTO studentRequestDTO) {
         return new ResponseEntity<>(studentService.saveStudent(studentRequestDTO), HttpStatus.CREATED);
     }
+
+    @GetMapping("/feature-branch-1")
+    public String featureBranch1() {
+        return "feature branch 1";
+    }
+
+    @GetMapping("/feature-branch-1-2")
+    public String featureBranch12() {
+        return "feature branch 1 - 2";
+    }
 }
