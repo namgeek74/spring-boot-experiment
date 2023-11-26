@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 public class StudentController {
-    private StudentService studentService;
+    private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -29,25 +29,5 @@ public class StudentController {
     @PostMapping("/student")
     public ResponseEntity<Student> saveStudent(@RequestBody @Valid StudentRequestDTO studentRequestDTO) {
         return new ResponseEntity<>(studentService.saveStudent(studentRequestDTO), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/feature-branch-1")
-    public String featureBranch1() {
-        return "feature branch 1";
-    }
-
-    @GetMapping("/feature-branch-1-2")
-    public String featureBranch12() {
-        return "feature branch 1 - 2";
-    }
-
-    @GetMapping("/feature-mater-1")
-    public String featureMaster1() {
-        return "feature master 1";
-    }
-
-    @GetMapping("/feature-mater-2")
-    public String featureMaster2() {
-        return "feature master 2";
     }
 }

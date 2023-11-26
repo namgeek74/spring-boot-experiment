@@ -1,23 +1,16 @@
 package com.springboot.controller;
 
-import com.springboot.dto.ImageUploadDTO;
 import com.springboot.dto.ImageUploadResponse;
-import com.springboot.dto.StudentRequestDTO;
 import com.springboot.entity.Image;
-import com.springboot.entity.Student;
 import com.springboot.repository.ImageRepository;
 import com.springboot.util.ImageUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +27,7 @@ import java.util.List;
 public class ImageController {
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png");
 
-    private ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
     public ImageController(ImageRepository imageRepository) {
@@ -112,15 +105,5 @@ public class ImageController {
     private boolean isValidImageType(MultipartFile imageFile) {
         String contentType = imageFile.getContentType();
         return contentType != null && ALLOWED_IMAGE_TYPES.contains(contentType);
-    }
-
-    @GetMapping("/feature-branch-2")
-    public String featureBranch2() {
-        return "feature branch 2";
-    }
-
-    @GetMapping("/feature-branch-2-1")
-    public String featureBranch21() {
-        return "feature branch 2-1";
     }
 }
